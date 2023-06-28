@@ -15,11 +15,8 @@ from sklearn.model_selection import train_test_split, cross_val_score
 raw = pd.read_csv('data_pre.csv')
 df_model = raw.copy() 
 df_model = df_model.dropna()
-df_model['DATE'] = pd.to_datetime(df_model['DATE'], format = '%Y %m %d')
 
-type(df_model.DATE[0])
-
-x1 = df_model.drop(df_model[['DATE', 'TS']], axis = 1)
+x1 = df_model.drop(df_model['TS'], axis = 1)
 y = df_model['TS']
 
 x = sm.add_constant(x1)
@@ -80,4 +77,4 @@ mean_absolute_error(y_test, tpred_lm)
 mean_absolute_error(y_test, tpred_lm_L)
 mean_absolute_error(y_test, tpred_rf)
 
-mean_absolute_error(y_test,(tpred_lm + tpred_lm_L + tpred_rf)/3)
+mean_absolute_error(y_test,(tpred_lm + tpred_rf)/2)

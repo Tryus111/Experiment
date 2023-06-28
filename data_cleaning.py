@@ -22,14 +22,17 @@ date['DATE'] = pd.to_datetime(date['DATE'], format = '%Y %m %d')
 
 # Concat date and data
 df_no_date = df_rain.drop(df_rain[['YEAR', 'MO', 'DY']], axis = 1)
-
-# Standardization
-from sklearn import preprocessing
-df_preprocessing = preprocessing.scale(df_no_date)
+df_no_date.columns
 
 df_preprocessing = pd.concat([date['DATE'], df_no_date], axis = 1)
 
+# Save file for EDA
+df_preprocessing.to_csv('data_clean.csv', index = False)
 
-# Save file
+# Standardization
+from sklearn import preprocessing
+scaled_data = preprocessing.scale(df_no_date)
+df_preprocessing = pd.DataFrame(scaled_data, columns=df_no_date.columns)
+
+# Save file for model
 df_preprocessing.to_csv('data_pre.csv', index = False)
-

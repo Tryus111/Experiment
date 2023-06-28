@@ -14,6 +14,7 @@ from sklearn.model_selection import train_test_split, cross_val_score
 
 raw = pd.read_csv('data_pre.csv')
 df_model = raw.copy() 
+df_model = df_model.dropna()
 df_model['DATE'] = pd.to_datetime(df_model['DATE'], format = '%Y %m %d')
 
 type(df_model.DATE[0])
@@ -67,3 +68,16 @@ gs = GridSearchCV(rf, parameters, scoring = 'neg_mean_absolute_error', cv = 3)
 gs.fit(x_train, y_train)
 
 gs.best_score_
+gs.best_estimator_
+
+# Test Ensemble
+tpred_lm = lm.predict(x_test)
+tpred_lm_L = lm_L.predict(x_test)
+tpred_rf = gs.best_estimator_.predict(x_test) 
+
+from sklearn.metrics import mean_absolute_error
+mean_absolute_error(y_test, tpred_lm)
+mean_absolute_error(y_test, tpred_lm_L)
+mean_absolute_error(y_test, tpred_rf)
+
+mean_absolute_error(y_test,(tpred_lm + tpred_lm_L + tpred_rf)/3)
